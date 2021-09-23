@@ -127,7 +127,10 @@ T *LinkedList<T>::pop()
   }
   if (!firstItem->nextNode)
   {
-    return nullptr;
+    T *value = firstItem->value;
+    delete firstItem;
+    firstItem = nullptr;
+    return value;
   }
 
   Node<T> *lastItem = firstItem->nextNode;
@@ -138,8 +141,9 @@ T *LinkedList<T>::pop()
     lastItem = lastItem->nextNode;
   }
 
-  secondToLastItem->nextNode = nullptr;
   T *value = lastItem->value;
+  delete lastItem;
+  secondToLastItem->nextNode = nullptr;
   return value;
 }
 
