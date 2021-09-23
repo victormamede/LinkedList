@@ -2,6 +2,29 @@
 #include "payment.h"
 
 template <class T>
+void LinkedList<T>::unshift(T *value)
+{
+  insertAtPosition(0, value);
+}
+
+template <class T>
+void LinkedList<T>::insertAtPosition(int position, T *value)
+{
+  Node<T> *newNode = new Node(value);
+  if (position == 0)
+  {
+    newNode->nextNode = firstItem;
+    firstItem = newNode;
+    return;
+  }
+
+  Node<T> *node = getNodeAtPosition(position - 1);
+
+  newNode->nextNode = node->nextNode;
+  node->nextNode = newNode;
+}
+
+template <class T>
 void LinkedList<T>::push(T *value)
 {
   Node<T> *newNode = new Node(value);
@@ -19,6 +42,25 @@ void LinkedList<T>::push(T *value)
   }
 
   currentItem->nextNode = newNode;
+}
+
+template <class T>
+int LinkedList<T>::size()
+{
+  if (!firstItem)
+  {
+    return 0;
+  }
+
+  int count = 1;
+  Node<T> *currentItem = firstItem;
+  while (currentItem->nextNode)
+  {
+    count++;
+    currentItem = currentItem->nextNode;
+  }
+
+  return count;
 }
 
 template <class T>
@@ -45,20 +87,77 @@ T *LinkedList<T>::get(int position)
 }
 
 template <class T>
-void LinkedList<T>::insertAtPosition(int position, T *value)
+T *LinkedList<T>::shift()
 {
-  Node<T> *newNode = new Node(value);
+  Node<T> *toRemove = firstItem;
+  firstItem = toRemove->nextNode;
+
+  T *value = toRemove->value;
+  delete toRemove;
+
+  return value;
+}
+template <class T>
+T *LinkedList<T>::removeAt(int position)
+{
   if (position == 0)
   {
-    newNode->nextNode = firstItem;
-    firstItem = newNode;
-    return;
+    Node<T> *toRemove = firstItem;
+    firstItem = toRemove->nextNode;
+
+    return toRemove->value;
   }
 
   Node<T> *node = getNodeAtPosition(position - 1);
 
-  newNode->nextNode = node->nextNode;
-  node->nextNode = newNode;
+  Node<T> *toRemove = node->nextNode;
+  node->nextNode = toRemove->nextNode;
+
+  T *value = toRemove->value;
+  delete toRemove;
+
+  return value;
+}
+template <class T>
+T *LinkedList<T>::pop()
+{
+  if (!firstItem)
+  {
+    return nullptr;
+  }
+  if (!firstItem->nextNode)
+  {
+    return nullptr;
+  }
+
+  Node<T> *lastItem = firstItem->nextNode;
+  Node<T> *secondToLastItem = firstItem;
+  while (lastItem->nextNode)
+  {
+    secondToLastItem = lastItem;
+    lastItem = lastItem->nextNode;
+  }
+
+  secondToLastItem->nextNode = nullptr;
+  T *value = lastItem->value;
+  return value;
+}
+
+template <class T>
+T *LinkedList<T>::last()
+{
+  if (!firstItem)
+  {
+    return nullptr;
+  }
+
+  Node<T> *lastItem = firstItem;
+  while (lastItem->nextNode)
+  {
+    lastItem = lastItem->nextNode;
+  }
+
+  return lastItem->value;
 }
 
 template <class T>

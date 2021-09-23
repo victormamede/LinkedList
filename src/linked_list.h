@@ -19,9 +19,17 @@ class LinkedList
 public:
   LinkedList() : firstItem(nullptr) {}
 
-  void push(T *value);
-  T *get(int position);
+  void unshift(T *value);
   void insertAtPosition(int position, T *value);
+  void push(T *value);
+
+  T *shift();
+  T *removeAt(int position);
+  T *pop();
+
+  T *get(int position);
+  int size();
+  T *last();
 
   ~LinkedList();
 };

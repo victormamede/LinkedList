@@ -49,6 +49,33 @@ int main()
   std::cout << "Inserido na quarta posição: \n";
   list.get(3)->print();
 
+  std::cout << "Segunda posição antes do remove: \n";
+  list.get(1)->print();
+  std::cout << "Terceira posição antes do remove: \n";
+  list.get(2)->print();
+  std::cout << "Quarta posição antes do remove: \n";
+  list.get(3)->print();
+
+  Payment *removed = list.removeAt(2);
+
+  std::cout << "Segunda posição após o remove: \n";
+  list.get(1)->print();
+  std::cout << "Terceira posição após o remove: \n";
+  list.get(2)->print();
+  std::cout << "Item removido: \n";
+  removed->print();
+
+  delete removed;
+
+  std::cout << "Última posição antes do pop: \n";
+  list.last()->print();
+  std::cout << "Item removido: \n";
+  Payment *popped = list.pop();
+  popped->print();
+  delete popped;
+  std::cout << "Última posição após o pop: \n";
+  list.last()->print();
+
   return 0;
 }
 
