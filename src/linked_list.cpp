@@ -1,5 +1,5 @@
 #include "linked_list.h"
-#include "payment.h"
+#include "process.h"
 
 template <class T>
 void LinkedList<T>::unshift(T *value)
@@ -8,7 +8,7 @@ void LinkedList<T>::unshift(T *value)
 }
 
 template <class T>
-void LinkedList<T>::insertAtPosition(int position, T *value)
+void LinkedList<T>::insertAtPosition(ulong position, T *value)
 {
   Node<T> *newNode = new Node(value);
   if (position == 0)
@@ -45,14 +45,14 @@ void LinkedList<T>::push(T *value)
 }
 
 template <class T>
-int LinkedList<T>::size()
+size_t LinkedList<T>::size()
 {
   if (!firstItem)
   {
     return 0;
   }
 
-  int count = 1;
+  size_t count = 1;
   Node<T> *currentItem = firstItem;
   while (currentItem->nextNode)
   {
@@ -64,7 +64,7 @@ int LinkedList<T>::size()
 }
 
 template <class T>
-Node<T> *LinkedList<T>::getNodeAtPosition(int position)
+Node<T> *LinkedList<T>::getNodeAtPosition(ulong position)
 {
   if (position == 0)
   {
@@ -72,7 +72,7 @@ Node<T> *LinkedList<T>::getNodeAtPosition(int position)
   }
 
   Node<T> *currentItem = firstItem;
-  for (int i = 0; i < position; i++)
+  for (ulong i = 0; i < position; i++)
   {
     currentItem = currentItem->nextNode;
   }
@@ -81,7 +81,7 @@ Node<T> *LinkedList<T>::getNodeAtPosition(int position)
 }
 
 template <class T>
-T *LinkedList<T>::get(int position)
+T *LinkedList<T>::get(ulong position)
 {
   return getNodeAtPosition(position)->value;
 }
@@ -98,7 +98,7 @@ T *LinkedList<T>::shift()
   return value;
 }
 template <class T>
-T *LinkedList<T>::removeAt(int position)
+T *LinkedList<T>::removeAt(ulong position)
 {
   if (position == 0)
   {
@@ -179,7 +179,12 @@ void freeNode(Node<T> *node)
 template <class T>
 LinkedList<T>::~LinkedList()
 {
+  if (firstItem == nullptr)
+  {
+    return;
+  }
+
   freeNode(firstItem);
 }
 
-template class LinkedList<Payment>;
+template class LinkedList<Process>;

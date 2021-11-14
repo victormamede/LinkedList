@@ -1,90 +1,113 @@
 #include <iostream>
-#include "payment.h"
-#include "linked_list.h"
+#include <string>
+#include "scheduler.h"
+#include "process.h"
 
-Payment *createRandomPayment();
-int randomCount = 0;
-
-double doubleRand()
-{
-  std::srand(std::time(0) + randomCount);
-  randomCount++;
-  return double(rand()) / (double(RAND_MAX) + 1.0);
-}
+Process *createProcess();
+ulong promptListIndex();
+uint promptPid();
 
 int main()
 {
-  LinkedList<Payment> list;
+  Scheduler scheduler;
+  system("clear");
 
-  Payment *thirdPosition = createRandomPayment();
+  while (true)
+  {
+    scheduler.print();
 
-  list.push(createRandomPayment());
-  list.push(thirdPosition);
-  list.push(createRandomPayment());
-  list.push(createRandomPayment());
-  list.push(createRandomPayment());
+    std::string input;
 
-  std::cout << "Segunda posição: \n";
-  thirdPosition->print();
-  std::cout << "Segunda posição get: \n";
-  list.get(1)->print();
+    std::cout << "\n";
+    std::cout << "Escolha uma opção: \n";
+    std::cout << "1: Criar fila de prioridade \n";
+    std::cout << "2: Remover fila de prioridade \n";
+    std::cout << "3: Adicionar processo \n";
+    std::cout << "4: Executar próximo processo \n";
+    std::cout << "5: Mover processo \n";
+    std::cout << "6: Finalizar processo \n";
+    std::cout << "7: Finalizar processo PID \n";
+    std::cout << "\n";
+    std::cout << "0: Sair\n";
 
-  Payment *toInsert = createRandomPayment();
+    std::getline(std::cin, input);
 
-  std::cout << "Terceira posição antes do insert: \n";
-  list.get(2)->print();
-  std::cout << "Quarta posição antes do insert: \n";
-  list.get(3)->print();
+    if (input == "1")
+    {
+      scheduler.createPriorityQueue();
+    }
+    else if (input == "2")
+    {
+      scheduler.removePriorityQueue();
+    }
+    else if (input == "3")
+    {
+      scheduler.addProcess(createProcess(), promptListIndex());
+    }
+    else if (input == "4")
+    {
+      scheduler.executeProcess();
+    }
+    else if (input == "5")
+    {
+      try
+      {
+        scheduler.moveProcess(promptPid(), promptListIndex());
+      }
+      catch (const std::invalid_argument &e)
+      {
+        std::cout << "PID não encontrado\n\n";
+      }
+    }
+    else if (input == "6")
+    {
+      scheduler.endProcess();
+    }
+    else if (input == "7")
+    {
+      scheduler.endProcess(promptPid());
+    }
 
-  list.insertAtPosition(3, toInsert);
-
-  std::cout << "Terceira posição depois do insert: \n";
-  list.get(2)->print();
-  std::cout << "Quinta posição depois do insert: \n";
-  list.get(4)->print();
-
-  std::cout
-      << "Para inserir na quarta posição: \n";
-  toInsert->print();
-  std::cout << "Inserido na quarta posição: \n";
-  list.get(3)->print();
-
-  std::cout << "Segunda posição antes do remove: \n";
-  list.get(1)->print();
-  std::cout << "Terceira posição antes do remove: \n";
-  list.get(2)->print();
-  std::cout << "Quarta posição antes do remove: \n";
-  list.get(3)->print();
-
-  Payment *removed = list.removeAt(2);
-
-  std::cout << "Segunda posição após o remove: \n";
-  list.get(1)->print();
-  std::cout << "Terceira posição após o remove: \n";
-  list.get(2)->print();
-  std::cout << "Item removido: \n";
-  removed->print();
-
-  delete removed;
-
-  std::cout << "Última posição antes do pop: \n";
-  list.last()->print();
-  std::cout << "Item removido: \n";
-  Payment *popped = list.pop();
-  popped->print();
-  delete popped;
-  std::cout << "Última posição após o pop: \n";
-  list.last()->print();
+    if (input == "0")
+    {
+      break;
+    }
+    system("clear");
+  }
 
   return 0;
 }
 
-Payment *createRandomPayment()
+Process *createProcess()
 {
-  Payment *payment = new Payment();
-  payment->value = doubleRand() * 1000;
-  payment->expiration = doubleRand() * 1000;
-  payment->status = doubleRand() > 0.5;
+  auto process = new Process;
+  std::string input;
 
-  return payment;
+  std::cout << "Especifique o PID: \n";
+  std::getline(std::cin, input);
+  process->pid = std::stoi(input);
+
+  std::cout << "Especifique o nome do processo: \n";
+  std::getline(std::cin, input);
+  process->name = input;
+
+  return process;
+}
+
+ulong promptListIndex()
+{
+  std::string input;
+
+  std::cout << "Especifique o índice da Lista: \n";
+  std::getline(std::cin, input);
+  return std::stoul(input);
+}
+
+uint promptPid()
+{
+  std::string input;
+
+  std::cout << "Especifique o PID do processo: \n";
+  std::getline(std::cin, input);
+  return std::stoul(input);
 }
