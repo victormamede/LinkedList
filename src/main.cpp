@@ -65,7 +65,14 @@ int main()
     }
     else if (input == "7")
     {
-      scheduler.endProcess(promptPid());
+      try
+      {
+        scheduler.endProcess(promptPid());
+      }
+      catch (const std::invalid_argument &e)
+      {
+        std::cout << "PID não encontrado\n\n";
+      }
     }
 
     if (input == "0")

@@ -7,6 +7,7 @@
     "**/requirements{/**,*}.{txt,in}": "pip-requirements",
     "*.erb": "erb",
     "*.css": "css",
-    "new": "cpp"
+    "new": "cpp",
+    "vector": "cpp"
   }
 }
